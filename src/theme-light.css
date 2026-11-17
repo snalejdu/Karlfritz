@@ -1,0 +1,150 @@
+
+/* ================================================================== */
+/* Theme toggle                                                        */
+/* ================================================================== */
+.theme-toggle {
+  position: relative;
+  display: grid; place-items: center;
+  width: 44px; height: 44px; border-radius: 999px;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  transition:
+    transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background-color 0.3s, box-shadow 0.4s var(--ease), color 0.3s;
+  -webkit-tap-highlight-color: transparent;
+}
+.theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px) scale(1.07);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 8px 24px -8px rgba(255, 255, 255, 0.25);
+}
+.theme-toggle:active { transform: scale(0.88); transition-duration: 0.12s; }
+.theme-toggle:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+
+.tt-icon {
+  position: absolute;
+  transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease;
+}
+.tt-moon { transform: rotate(0) scale(1); opacity: 1; }
+.tt-sun { transform: rotate(-120deg) scale(0.4); opacity: 0; }
+.theme-toggle.is-light .tt-moon { transform: rotate(120deg) scale(0.4); opacity: 0; }
+.theme-toggle.is-light .tt-sun { transform: rotate(0) scale(1); opacity: 1; }
+.tt-rays { transform-origin: 12px 12px; transition: transform 0.9s var(--ease); }
+.theme-toggle:hover .tt-moon { transform: rotate(-18deg) scale(1.06); }
+.theme-toggle.is-light:hover .tt-rays { transform: rotate(45deg) scale(1.08); }
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle, .tt-icon, .tt-rays { transition-duration: 0.01s !important; }
+}
+
+/* circular reveal (View Transitions) */
+::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+::view-transition-new(root) { z-index: 9999; }
+/* fallback crossfade */
+html.theme-fade, html.theme-fade *, html.theme-fade *::before, html.theme-fade *::after {
+  transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease, fill 0.5s ease !important;
+}
+
+/* ================================================================== */
+/* Light mode                                                          */
+/* Tailwind's white/black utilities read --color-white/--color-black,  */
+/* so swapping those flips every text-white / bg-white/10 / border...   */
+/* Screenshots & photo panels opt out with .theme-keep.                */
+/* ================================================================== */
+:root { --hero-bg: #050505; }
+
+html.light {
+  --color-white: #0b0b0d;
+  --color-black: #ffffff;
+  --text: #0b0b0d;
+  --text-2: rgba(11, 11, 13, 0.76);
+  --text-lede: rgba(11, 11, 13, 0.64);
+  --text-3: rgba(11, 11, 13, 0.52);
+  --text-4: rgba(11, 11, 13, 0.24);
+  --line: rgba(0, 0, 0, 0.08);
+  --chrome: linear-gradient(180deg, #0b0b0d 8%, #2c2c31 46%, #5a5a61 96%);
+  --chrome-deep: linear-gradient(180deg, #0b0b0d 10%, #4a4a50 60%, #9a9aa0 100%);
+  --chrome-stat: linear-gradient(180deg, #0b0b0d 10%, #3a3a40 55%, #77777d 100%);
+  --hero-bg: #f2f2f3;
+  color-scheme: light;
+  background: #f5f5f5;
+}
+html.light body {
+  background: radial-gradient(900px 600px at 100% 40%, rgba(0, 0, 0, 0.025), transparent 60%), #f5f5f5;
+}
+html.light ::selection { background: #0b0b0d; color: #f5f5f7; }
+html.light .grain { opacity: 0.03; }
+
+/* opt-out islands keep the dark palette */
+html.light .theme-keep {
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --text: #f5f5f7;
+  --text-2: rgba(245, 245, 247, 0.78);
+  --text-lede: rgba(245, 245, 247, 0.66);
+  --text-3: rgba(245, 245, 247, 0.42);
+  --text-4: rgba(245, 245, 247, 0.2);
+  color: var(--text);
+}
+
+/* hero: workspace photo fades back to a soft grey wash; shades flip to white */
+html.light [data-hero-bg] > div:first-child { background: var(--hero-bg); }
+html.light [data-hero-bg] .hero-photo { opacity: 0.14; filter: grayscale(1); }
+html.light [data-hero-bg] .hero-shade { filter: invert(0.96); }
+
+/* theme-specific images */
+html.light .only-dark { display: none; }
+html:not(.light) .only-light { display: none; }
+
+/* gradient type */
+html.light .text-grad:not(.theme-keep *), html.light .text-grad:not(.theme-keep *) .w, html.light .text-grad:not(.theme-keep *) .c {
+  background-image: linear-gradient(180deg, #0b0b0d 0.1em, #2c2c31 0.6em, #55555c 1.2em);
+}
+html.light .text-dim { color: rgba(11, 11, 13, 0.45); }
+
+/* glass */
+html.light .glass:not(.theme-keep *):not(.glass-cap) {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.68), rgba(248, 248, 250, 0.54));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.07),
+    0 1px 1px rgba(0, 0, 0, 0.04),
+    0 24px 60px -24px rgba(0, 0, 0, 0.2);
+}
+html.light .glass.glass-menu { background: linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(246, 246, 248, 0.8)); }
+html.light .glass.glass-soft:not(.theme-keep *) { background: linear-gradient(180deg, rgba(0, 0, 0, 0.035), rgba(0, 0, 0, 0.015)); }
+/* hover glow follows the pointer: white light in dark mode, a soft dark shade in light mode */
+html.light .glass:not(.btn):not(.theme-keep *)::after {
+  background: radial-gradient(360px circle at var(--mx, 50%) var(--my, 50%), rgba(0, 0, 0, 0.085), rgba(0, 0, 0, 0) 70%);
+}
+
+/* buttons */
+html.light .btn-primary {
+  color: #fff;
+  background: linear-gradient(180deg, #2a2a2f 0%, #0b0b0d 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 -1px 0 rgba(0, 0, 0, 0.4), 0 14px 36px -12px rgba(0, 0, 0, 0.45);
+}
+html.light .btn-primary:hover {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 -1px 0 rgba(0, 0, 0, 0.4), 0 22px 46px -14px rgba(0, 0, 0, 0.5);
+}
+html.light .btn-glass::after { background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent); }
+
+html.light .theme-toggle { background: rgba(0, 0, 0, 0.05); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), inset 0 0 0 1px rgba(0, 0, 0, 0.08); }
+html.light .theme-toggle:hover {
+  background: rgba(0, 0, 0, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), inset 0 0 0 1px rgba(0, 0, 0, 0.12), 0 8px 22px -8px rgba(0, 0, 0, 0.3);
+}
+
+/* small components */
+html.light .chip { background: rgba(0, 0, 0, 0.045); }
+/* soft spotlight only: no flat tint (a filled card reads as a hard-edged block on white) */
+html.light .spot::after { display: none; } /* per-card glow stops at the card border; on white that edge shows */
+html.light .spot:hover { background-color: transparent; }
+@media (prefers-reduced-motion: no-preference) {
+  html.light .lift:hover { box-shadow: 0 22px 60px -22px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.9); }
+}
+html.light .g-underline { color: var(--text); background-image: linear-gradient(var(--text), var(--text)); }
+html.light .ghost-outline { -webkit-text-stroke: 1px rgba(0, 0, 0, 0.12); }
+html.light .corner-icon { border-color: rgba(0, 0, 0, 0.14); }
+html.light .group:hover .corner-icon { background: #0b0b0d; color: #fff; }
+html.light .sphere { box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.6), inset 0 -20px 40px rgba(0, 0, 0, 0.18), inset 0 0 0 1px rgba(0, 0, 0, 0.06), 0 40px 80px -24px rgba(0, 0, 0, 0.3); }

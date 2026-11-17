@@ -1,0 +1,366 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Rethink Sans Variable", "Rethink Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --color-ink: #050506;
+  --color-paper: #f5f5f7;
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+/* ------------------------------------------------------------------ */
+/* Base                                                                */
+/* ------------------------------------------------------------------ */
+:root {
+  --text: #f5f5f7;
+  --text-2: rgba(245, 245, 247, 0.78);
+  --text-lede: rgba(245, 245, 247, 0.66);
+  --text-3: rgba(245, 245, 247, 0.42);
+  --text-4: rgba(245, 245, 247, 0.2);
+  --chrome: linear-gradient(180deg, #ffffff 8%, #d4d4d9 46%, #8a8a90 96%);
+  --chrome-deep: linear-gradient(180deg, #ffffff 10%, #a1a1a6 60%, #3a3a3c 100%);
+  --chrome-stat: linear-gradient(180deg, #ffffff 10%, #c7c7cc 55%, #7c7c80 100%);
+  --pad-x: clamp(20px, 4.6vw, 72px);
+  --line: rgba(255, 255, 255, 0.08);
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  color-scheme: dark;
+}
+
+html {
+  background: #000;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--text);
+  background:
+    radial-gradient(900px 600px at 100% 40%, rgba(255, 255, 255, 0.025), transparent 60%),
+    #000;
+  overflow-x: clip;
+}
+
+::selection { background: #f5f5f7; color: #050506; }
+
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+
+}
+
+@layer components {
+/* film grain */
+.grain {
+  position: fixed; inset: -50%;
+  pointer-events: none; z-index: 80;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-3%, 2%); }
+  40% { transform: translate(2%, -3%); }
+  60% { transform: translate(-2%, -1%); }
+  80% { transform: translate(3%, 3%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* ------------------------------------------------------------------ */
+/* Layout                                                              */
+/* ------------------------------------------------------------------ */
+.wrap { max-width: 1440px; margin-inline: auto; padding-inline: var(--pad-x); }
+.wrap-narrow { max-width: 1060px; margin-inline: auto; padding-inline: var(--pad-x); }
+.section { padding-block: clamp(72px, 6.4vw, 104px); }
+
+/* ------------------------------------------------------------------ */
+/* Type                                                                */
+/* ------------------------------------------------------------------ */
+.h-display {
+  font-weight: 700;
+  font-size: clamp(2.6rem, 10.6vw, 9.6rem);
+  line-height: 0.9;
+  letter-spacing: -0.055em;
+}
+.h-section {
+  font-weight: 600;
+  font-size: clamp(2.2rem, 6.2vw, 5.6rem);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+.h-section-sm {
+  font-weight: 600;
+  font-size: clamp(2rem, 4.3vw, 3.9rem);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+.h-statement {
+  font-weight: 600;
+  font-size: clamp(1.9rem, 5.4vw, 4.9rem);
+  line-height: 1.02;
+  letter-spacing: -0.042em;
+}
+.h-card {
+  font-weight: 600;
+  font-size: clamp(1.25rem, 1.8vw, 1.6rem);
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+}
+.lead { color: var(--text-lede); font-size: clamp(1rem, 1.3vw, 1.2rem); line-height: 1.55; }
+.muted { color: var(--text-3); }
+
+/* grey gradient second line. Applied to split children too so SplitText keeps it. */
+.text-grad,
+.text-grad .w, .text-grad .c {
+  background-image: var(--chrome);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.text-dim { color: rgba(245, 245, 247, 0.45); }
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 12px; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--text-3);
+}
+.eyebrow-pill {
+  padding: 10px 18px; border-radius: 999px; color: #fff; letter-spacing: 0.18em;
+  background: linear-gradient(180deg, rgba(22, 22, 24, 0.5), rgba(14, 14, 16, 0.42)) !important;
+}
+html.light .eyebrow-pill { color: var(--text); background: linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(248, 248, 250, 0.55)) !important; }
+
+.mono { font-family: var(--font-mono); }
+
+/* ------------------------------------------------------------------ */
+/* Liquid glass                                                        */
+/* ------------------------------------------------------------------ */
+.glass {
+  position: relative;
+  isolation: isolate;
+  /* same surface as the nav bar */
+  background: linear-gradient(180deg, rgba(22, 22, 24, 0.58), rgba(14, 14, 16, 0.5));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.03),
+    0 1px 1px rgba(0, 0, 0, 0.35),
+    0 24px 60px -18px rgba(0, 0, 0, 0.7);
+}
+/* Backdrop effects only where something actually sits behind the glass
+   (fixed nav/menus, chips & buttons over the hero, captions/badges over screenshots).
+   Cards on the plain black page skip it: same look, far cheaper to scroll. */
+.glass-liquid, .glass-dark, .glass-cap, .badge-live {
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: blur(18px) saturate(150%);
+}
+.glass::before {
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.12) 26%, rgba(255, 255, 255, 0.03) 55%, rgba(255, 255, 255, 0.26) 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
+/* Every glass surface: bright specular rim (::before) + pointer-follow glow (::after).
+   Edge refraction is applied per element by src/lib/liquid.ts */
+.glass:not(.btn)::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  z-index: -1; /* behind the content, above the glass background (.glass is isolated) */
+  background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0) 70%);
+  opacity: 0; transition: opacity 0.4s;
+}
+.glass:not(.btn):hover::after { opacity: 1; }
+.glass-dark { background: linear-gradient(180deg, rgba(22, 22, 24, 0.58), rgba(14, 14, 16, 0.5)); }
+.glass-cap {
+  background: linear-gradient(180deg, rgba(24, 24, 26, 0.55), rgba(10, 10, 12, 0.45));
+  -webkit-backdrop-filter: blur(22px) saturate(1.7);
+  backdrop-filter: blur(22px) saturate(1.7);
+}
+/* Dropdown menus: same dark glass + rim as the nav bar, slightly denser so hero type behind stays a soft haze */
+.glass.glass-menu {
+  background: linear-gradient(180deg, rgba(18, 18, 20, 0.74), rgba(10, 10, 12, 0.7));
+  -webkit-backdrop-filter: blur(28px) saturate(150%);
+  backdrop-filter: blur(28px) saturate(150%);
+}
+.glass-soft {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015));
+}
+
+/* ------------------------------------------------------------------ */
+/* Buttons                                                             */
+/* ------------------------------------------------------------------ */
+.btn {
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 17px 30px;
+  border-radius: 999px;
+  overflow: hidden;
+  font-weight: 600; font-size: 16px; line-height: 1.5;
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+  transition: transform 0.6s var(--ease), box-shadow 0.6s var(--ease), background 0.3s, color 0.3s;
+  will-change: transform;
+}
+.btn-sm { padding: 11px 19px; font-size: 14px; }
+.btn-lg { padding: 22px 40px; font-size: 18px; }
+.btn::after {
+  content: ""; position: absolute; top: 0; bottom: 0; left: -40%; width: 30%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: translateX(0) skewX(-16deg); opacity: 0.6; pointer-events: none;
+}
+.btn-glass::after { background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent); }
+@media (prefers-reduced-motion: no-preference) {
+  .btn:hover::after { transform: translateX(560%) skewX(-16deg); transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1); }
+}
+.btn-primary {
+  color: #000;
+  background: linear-gradient(180deg, #ffffff 0%, #e6e6eb 100%);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    inset 0 -1px 0 rgba(0, 0, 0, 0.14),
+    0 14px 40px -12px rgba(255, 255, 255, 0.45);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    inset 0 -1px 0 rgba(0, 0, 0, 0.14),
+    0 22px 50px -14px rgba(255, 255, 255, 0.6);
+}
+.btn-glass { color: #fff; background: linear-gradient(180deg, rgba(40, 40, 44, 0.55), rgba(18, 18, 20, 0.5)) !important; }
+html.light .btn-glass { color: var(--text); background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(246, 246, 248, 0.56)) !important; }
+.btn-glass:hover { transform: translateY(-2px); }
+.btn .arrow { transition: transform 0.5s var(--ease); }
+.btn:hover .arrow { transform: translateX(4px); }
+
+.link-arrow { display: inline-flex; gap: 8px; align-items: center; font-weight: 600; font-size: 15px; }
+.link-arrow span { transition: transform 0.5s var(--ease); }
+.link-arrow:hover span { transform: translateX(4px); }
+
+.chip {
+  display: inline-flex; align-items: center;
+  padding: 6px 11px;
+  border-radius: 999px;
+  font-size: 10.5px; font-weight: 600;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--text-lede);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* ------------------------------------------------------------------ */
+/* Marquee                                                             */
+/* ------------------------------------------------------------------ */
+.marquee {
+  display: flex; overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+.marquee-track { display: flex; flex-shrink: 0; min-width: 100%; animation: marquee var(--dur, 60s) linear infinite; }
+.marquee-reverse .marquee-track { animation-direction: reverse; }
+@media (hover: hover) { .marquee:hover .marquee-track { animation-play-state: paused; } }
+@keyframes marquee { to { transform: translateX(-100%); } }
+
+/* ------------------------------------------------------------------ */
+/* Cards                                                               */
+/* ------------------------------------------------------------------ */
+.spot { --mx: 50%; --my: 50%; isolation: isolate; }
+.spot::after {
+  content: "";
+  position: absolute; inset: 0; border-radius: inherit;
+  z-index: -1;
+  background: radial-gradient(420px circle at var(--mx) var(--my), rgba(255, 255, 255, 0.07), transparent 45%);
+  opacity: 0; transition: opacity 0.4s;
+  pointer-events: none;
+}
+.spot:hover::after { opacity: 1; }
+
+.lift { transition: transform 0.6s var(--ease), box-shadow 0.6s var(--ease); }
+@media (prefers-reduced-motion: no-preference) {
+  .lift:hover { transform: translateY(-6px); box-shadow: 0 22px 60px -22px rgba(255, 255, 255, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.16); }
+}
+.g-underline {
+  color: #fff; font-weight: 600; padding-bottom: 3px;
+  background: linear-gradient(#fff, #fff) no-repeat 0 100% / 0% 1.5px;
+  transition: background-size 1.2s var(--ease) 0.25s;
+}
+.g-underline.is-in { background-size: 100% 1.5px; }
+.ghost-outline { color: transparent; -webkit-text-stroke: 1px rgba(255, 255, 255, 0.11); }
+.stat-num { background-image: var(--chrome-stat); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.chrome-deep { background-image: var(--chrome-deep); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.corner-icon {
+  display: grid; place-items: center;
+  width: 38px; height: 38px; border-radius: 99px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  transition: transform 0.6s var(--ease), background 0.3s, color 0.3s;
+}
+.group:hover .corner-icon { transform: rotate(45deg); background: #fff; color: #000; }
+
+.badge-live {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 14px; border-radius: 999px;
+  font-size: 10.5px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+}
+
+/* ------------------------------------------------------------------ */
+/* Glass sphere (contact)                                              */
+/* ------------------------------------------------------------------ */
+.sphere {
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.08) 28%, transparent 50%),
+    radial-gradient(circle at 72% 80%, rgba(255, 255, 255, 0.22), transparent 42%),
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.06) 70%, rgba(255, 255, 255, 0.18) 100%);
+  box-shadow:
+    inset 0 2px 2px rgba(255, 255, 255, 0.45),
+    inset 0 -20px 40px rgba(0, 0, 0, 0.45),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 40px 80px -20px rgba(0, 0, 0, 0.8);
+  -webkit-backdrop-filter: blur(3px) brightness(1.3) contrast(1.1);
+  backdrop-filter: blur(3px) brightness(1.3) contrast(1.1);
+}
+
+
+/* ------------------------------------------------------------------ */
+/* Misc                                                                */
+/* ------------------------------------------------------------------ */
+.hairline { height: 1px; background: var(--line); }
+
+/* Masks need room for ascenders/descenders (g, p, y) on tight display line-heights */
+.split-line, .split-line-mask { overflow: clip; padding-block: 0.08em 0.35em; margin-block: -0.08em -0.35em; }
+/* background-clip:text only paints inside the box: give gradient words room below for g/p/y,
+   and use em stops so the extra padding doesn't stretch the chrome gradient */
+.text-grad, .text-grad .w, .text-grad .c {
+  padding-bottom: 0.35em; margin-bottom: -0.35em;
+  background-image: linear-gradient(180deg, #ffffff 0.1em, #d4d4d9 0.6em, #a1a1a7 1.2em);
+  -webkit-box-decoration-break: clone; box-decoration-break: clone; /* each wrapped line gets its own gradient */
+}
+
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+}
+
+/* Pause expensive effects while jumping between sections (see lib/lenis.ts) */
+.is-jumping .glass, .is-jumping .sphere {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+.is-jumping .grain, .is-jumping .marquee-track { animation-play-state: paused; }
+.is-jumping .grain { opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .grain, .marquee-track { animation: none !important; }
+  .g-underline { background-size: 100% 1.5px; }
+}
